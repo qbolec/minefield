@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<head>
+  <meta charset="UTF-8">
+  <meta content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0' name='viewport' />
+  <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+* {
+  box-sizing: border-box;
+}
+body{
+  background: #018281;
+  color:white;
+  margin:8px auto;
+  padding:0;
+  width:306px;
+  font-family: Georgia, Arial;
+  font-size:15px;
+}
+label{
+  float:right;
+}
+div{
+  line-height: 2;
+}
+.on-border{
+  background:red;
+}
+body.won td:after{
+    content: " ";
+    position: absolute;
+    width: 2px;
+    height: 10px;
+    transform: scale(0.01);
+    animation-name: win;
+    animation-duration: 3s;
+}
+body.won td:nth-child(4n):after{
+  background: red;
+}
+body.won td:nth-child(4n+1):after{
+  background: blue;
+}
+body.won td:nth-child(4n+2):after{
+  animation-duration: 3.2s;
+  background: green;
+}
+body.won td:nth-child(4n+3):after{
+  background: yellow;
+}
+body.won td:nth-child(3n):after{
+  animation-duration: 2.2s;
+}
+body.won td:nth-child(3n+1):after{
+  animation-duration: 3.5s;
+}
+body.won td:nth-child(3n+2):after{
+  animation-delay: 0.2s;
+}
+body.won td:nth-child(5n):after{
+  font-size:1.5em;
+}
+body.won td:nth-child(5n+1):after{
+  font-size:3em;
+}
+body.won td:nth-child(5n+2):after{
+  font-size:2em;
+}
+body.won td:nth-child(5n+3):after{
+  font-size:0.7em;
+}
+body.won td:nth-child(5n+4):after{
+  font-size:2.3em;
+}
+body.won tr:nth-child(3n) td:after{
+  animation-duration: 2.8s;
+}
+body.won tr:nth-child(3n+1) td:after{
+  animation-delay: 0.5s;
+}
+body.won tr:nth-child(3n+2) td:after{
+  animation-delay: 0.7s;
+}
+@keyframes win {
+  from {
+    transform: translate(-0.2em, 0.1em) rotate(-45deg) scale(0.1);
+  }
+  30% {
+    transform: translate(-10px, -2em) rotate(145deg) translate(0px,1em) rotate(450deg) scale(2);
+  }
+  to {
+    transform: translate(10px, 200px) rotate(1000deg) scale(0.01);
+  }
+}
+td{
+  border:2px solid;
+  border-color:gray;
+  width:34px;
+  height:34px;
+  padding:0;
+  font-family:monospace;
+  vertical-align:middle;
+  text-align:center;
+  background:gray;
+  font-weight:bold;
+  font-size:20px;
+}
+.type_1{
+  color:blue;
+}
+.type_2{
+  color:green;
+}
+.type_3{
+  color:red;
+}
+.type_4{
+  color:darkblue;
+}
+.type_5{
+  color:brown;
+}
+.type_6{
+  color:teal;
+}
+.type_7{
+  color:black;
+}
+.type_8{
+  color:#404040;
+}
+.type_bomb:before{
+  content:"💣";
+}
+.type_flag,
+.type_bomb{
+  position:relative;
+  font-size:0;
+}
+.type_flag:before{
+  content:"⚑";
+  color:red;
+}
+.type_bomb:before,
+.type_flag:before{
+  position:absolute;
+  top:0;
+  left:0;
+  width:100%;
+  line-height:30px;
+  font-size:20px;
+
+}
+.type_bomb,
+.type_flag,
+.type_null{
+  border-top-color:white;
+  border-left-color:white;
+  border-bottom-color:black;
+  border-right-color:black;
+}
+table {
+    border-spacing: 0px;
+    border-collapse: separate;
+}
+#cookies_policy_toggle,
+#rules_toggle{
+  position: absolute;
+  left: -100vw;
+}
+.rules{
+  display:none;
+  padding-bottom:10px;
+  width:320px;
+  font-size:15px;
+}
+label{
+  cursor:pointer;
+}
+#cookies_policy_toggle:checked ~ #cookie_policy {
+  left:0;
+}
+#rules_toggle:checked ~ .rules {
+  display: block;
+}
+#noat-cookie-consent__setup{
+  display: block;
+  margin-top: 20px;
+  color: black;
+  float: right;
+}
+#cookie_policy{
+  position: absolute;
+  top:0px;
+  left:-100vw;
+  width:100%  ;
+  bottom:0px;
+  background: black;
+  color:white;
+  padding:10px;
+  z-index: 2;
+  overflow: scroll;
+}
+#cookie_policy a{
+  color:white;
+}
+.noat-cookie__consent {
+    z-index: 1 !important;
+}
+    </style>
+<script>
+let cookie_consent_cookie=document.cookie.split('; ').find(row => row.startsWith('cookieconsent_status'));
+let cookie_consent=(cookie_consent_cookie===undefined)||cookie_consent_cookie.split('=')[1]=='allow';
+if(cookie_consent){
+  // Google Analytics
+  let s=document.createElement('script');
+  s.async=true;
+  s.src="https://www.googletagmanager.com/gtag/js?id=G-QX7VNNYC4J";
+  s.type="text/javascript";
+  document.head.appendChild(s);
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-QX7VNNYC4J');
+}
+</script>
+
+</head>
+<body>
+  <div>There are 10 bombs somewhere. <label for="rules_toggle">[?]</label></div>
+  <input type="checkbox" id="rules_toggle">
+<span class="rules">If you click a field which contains a bomb in more than 1/8 of all possible worlds, you'll die. Otherwise the number of bombs nearby is the most popular among possible worlds for this field, with ties broken in favor of the larger number.</span>
+  <table id=gameboard></table>
+  <div id=summary></div>
+  <button onclick="start()">restart</button>
+  <script>
+
+    window.noat={cookieConsent:{
+      privacyPolicyUrl:'javascript:cookies_policy_toggle.checked=true;void(0)',
+      text:'This website is using Cookies!'
+    }};
+  </script>
+  <script language="javascript" src="gdpr-cookie-monster.min.js"></script>
+  <a href="#" id="noat-cookie-consent__setup">Cookie Settings</a>
+  <input type="checkbox" id="cookies_policy_toggle">
+  <div id="cookie_policy"><label for="cookies_policy_toggle">[X]</label>This website is intergrated with <a href="https://analytics.google.com/">Google Analytics</a> tools, so the author knows how many users, and from which directions, how often and for how long are playing this game. Google Analytics uses various cookies to track you here and other sites and you can find out more about it at <a href="https://support.google.com/analytics/topic/2919631?hl=en&ref_topic=1008008">their site</a>. You can disable Google Analytics by clicking "Disable Cookies" in "Cookie Settings" and reloading the page (as long as you don't reload the Google Analytics' scripts are still running, I can't rewind the time for you, and I don't want to spoil your game by reloading automatically). You may also be interested in <a href="https://chrome.google.com/webstore/detail/google-analytics-opt-out/fllaojicojecljbmefodhfapmkghcbnh?hl=en">Google Analytics Opt-out Add-on (by Google)</a>, <a href="https://www.howtogeek.com/241006/how-to-block-third-party-cookies-in-every-web-browser/">disabling third party cookies</a> (this will not prevent Google Analytics cookies on <b>this</b> site, as they're in <b>this</b> domain, but makes it harder to connect the dots for whoever is tracing you), <a href="https://en.wikipedia.org/wiki/Private_browsing">private browsing mode</a>, or a browser which protects your privacy by default like <a href="https://brave.com/">Brave</a> or <a href="https://play.google.com/store/apps/details?id=org.mozilla.focus">Firefox Focus</a>.</div>
+</body>
+<script>
+  const BOMBS=10;
+const near=[[-1,-1],[1,-1],[-1,1],[1,1],[-1,0],[1,0],[0,1],[0,-1]];
+let choose=[];
+let alive=true;
+let generation=0;
+for(let n=0;n<=100;n++){
+  choose[n]=[1];
+  for(let k=1;k<n && k<=10;++k)
+    choose[n][k]=choose[n-1][k-1]+choose[n-1][k];
+  if(n<=10)choose[n][n]=1;
+}
+function forNear(board,r,c,foo){
+  near.forEach(([dr,dc])=>{
+    const rr=r+dr;
+    const cc=c+dc;
+    if(board[rr]&&board[rr][cc]!==undefined)
+      foo(board[rr][cc],rr,cc);
+  });
+}
+function isBorder(board,r,c){
+  if(board[r]&&board[r][c]===null){
+    let info=0;
+    forNear(board,r,c,(p)=>{if(p!==null&&p!='bomb')info++;});
+    if(info)
+      return true;
+  }
+  return false;
+}
+function getBorder(board){
+  let border=[];
+  let seen={};
+  board.forEach((row,R)=>{row.forEach((cell,C)=>{
+    let r=R;
+    let c=C;
+    if(isBorder(board,r,c)){
+      while(!seen[r+'_'+c]){
+        seen[r+'_'+c]=true;
+        border.push([r,c]);
+        forNear(board,r,c,(p,rr,cc)=>{
+          if(!seen[rr+'_'+cc]&&isBorder(board,rr,cc)){
+            r=rr;
+            c=cc;
+          }
+        });
+      }
+    }
+  })});
+  return border;
+}
+function getAwaiting(board){
+  return board.map((row,r)=>row.map((cell,c)=>{
+    if(cell===null){
+      return 0;
+    }else{
+      let a=0;
+      forNear(board,r,c,(p)=>{if(p===null)a++});
+      return a;
+    }
+  }));
+}
+function getPossibilities(board,bombs_count,with_bomb,demo){
+  let border=getBorder(board);
+  let border_count=0;
+  let info_count=0;
+  let unknown_count=0;
+  board.forEach((row,r)=>{row.forEach((cell,c)=>{
+    if(cell===null){
+      if(isBorder(board,r,c)){
+        border_count++;
+      }else{
+        unknown_count++;
+      }
+    }else{
+      info_count++;
+    }
+  })});
+  let awaiting=getAwaiting(board);
+  let bombs=board.map((row)=>row.map(()=>0));
+  let max_bombs=board.map((row)=>row.map((cell)=>cell===null?100:cell));
+  let max_empty=board.map((row,r)=>row.map((cell,c)=>cell===null?100:awaiting[r][c]-cell));
+
+  function set_bomb(r,c,b){
+    bombs[r][c]=b;
+    let coherent=true;
+    forNear(board,r,c,(p,rr,cc)=>{
+      if(--((b?max_bombs:max_empty)[rr][cc])<0){
+        coherent=false;
+      }
+    });
+    return coherent;
+  }
+  function reset_bomb(r,c){
+    let b=bombs[r][c];
+    bombs[r][c]=0;
+    forNear(board,r,c,(p,rr,cc)=>{
+      ++((b?max_bombs:max_empty)[rr][cc]);
+    });
+  }
+  if(border_count!=border.length)throw `bug in border detection ${border_count} vs ${border.length}`;
+  if(with_bomb){
+    let bomb_idx=border.findIndex(([r,c])=>r==with_bomb[0]&&c==with_bomb[1]);
+    if(bomb_idx<0){
+      if(unknown_count==0)throw "Somehow bomb is nowhere";
+      unknown_count--;
+      bombs_count--;
+      bombs[with_bomb[0]][with_bomb[1]]=1;
+      with_bomb=undefined;
+    }else{
+      if(!set_bomb(with_bomb[0],with_bomb[1],1)){
+        return 0;
+      }
+      border=border.slice(bomb_idx+1).concat(border.slice(0,bomb_idx));
+      bombs_count--;
+    }
+  }
+  let possibilities=0;
+  function check_all(pos){
+    if(pos==border.length){
+      if(demo){
+        demo.example=bombs.map(row=>row.map(x=>x));
+      }
+      possibilities+=choose[unknown_count][bombs_count];
+    }else{
+      const [r,c]=border[pos];
+      if(set_bomb(r,c,0)){
+        check_all(pos+1);
+      }
+      reset_bomb(r,c);
+      if(bombs_count){
+        bombs_count--;
+        if(set_bomb(r,c,1)){
+          check_all(pos+1);
+        }
+        reset_bomb(r,c);
+        bombs_count++;
+      }
+    }
+  }
+  check_all(0);
+  return possibilities;
+}
+const nine=Array.from({length:9});
+let board;
+let flag;
+function start(){
+  alive=true;
+  generation++;
+  document.body.className='';
+  board=nine.map(()=>nine.map(()=>null));
+  flag=nine.map(()=>nine.map(()=>false));
+  show(board);
+}
+function show(){
+  let border=getBorder(board);
+  let awaiting=getAwaiting(board);
+  gameboard.innerHTML=board.map((row,r)=>'<tr>'+row.map((cell,c)=>
+    `<td class="type_${cell===null&&flag[r][c]?'flag':cell}">${cell?cell:''}</td>`
+  ).join('')+'</tr>').join('');
+  const possibilities=getPossibilities(board,BOMBS);
+  summary.innerHTML= possibilities==1?'There is only one possibility!':`There are ${(''+possibilities).split(/(?=(?:\d{3})+$)/g).join(' ')} possibilities.`;
+}
+let todo=0;
+function clicked(r,c){
+  if(board[r][c]===null){
+    const all=getPossibilities(board,BOMBS);
+    const dead=getPossibilities(board,BOMBS,[r,c]);
+    if(dead*8 <= all){
+      let best=0;
+      let max_possibilities=0;
+      let empty=0;
+      forNear(board,r,c,(p)=>{if(p===null)empty++});
+      Array.from({length:empty+1}).map((_,x)=>{
+        board[r][c]=x;
+        const possibilities=getPossibilities(board,BOMBS);
+        console.log(`${x} : ${possibilities} possibilities`);
+        if(max_possibilities<=possibilities){
+          max_possibilities=possibilities;
+          best=x;
+        }
+      });
+      board[r][c]=best;
+      let covered=0;
+      board.forEach((row)=>row.forEach((cell)=>{if(cell===null)covered++}));
+      if(covered<=10){
+        document.body.className='won';
+      }
+      show(board);
+      if(best==0){//autoclick around
+        forNear(board,r,c,(p,rr,cc)=>{
+          if(p===null){
+            click(rr,cc);
+          }
+        });
+      }
+    }else{
+      alive=false;
+      demo={}
+      getPossibilities(board,BOMBS,[r,c],demo);
+      let bombs=BOMBS;
+      demo.example.forEach((row,r)=>row.forEach((b,c)=>{
+        if(b){
+          board[r][c]='bomb';
+          bombs--;
+        }
+      }));
+      board.forEach((row,r)=>row.forEach((cell,c)=>{
+        if(bombs && cell===null && !isBorder(board,r,c)){
+          board[r][c]='bomb';
+          bombs--;
+        }
+      }));
+      show(board);
+      summary.innerText=`You've died with probabability ${Math.round(100*dead/all)}%.`;
+    }
+  }
+  if(!--todo){
+    document.body.style.cursor=""
+  }
+}
+function click(r,c){
+  todo++;
+  const g=generation;
+  document.body.style.cursor='wait';
+  setTimeout(()=>{
+    if(g==generation){
+      clicked(r,c);
+    }else{
+      console.log(`Cancelled click from generation ${g}`);
+      if(!--todo){
+        document.body.style.cursor=""
+      }
+    }
+  },Math.random()*100);
+}
+start();
+function handleLeftClick(t){
+  console.log('handleLeftClick');
+  if(!alive)start();
+  for(let r=0;r<board.length;++r){
+    for(let c=0;c<board[r].length;++c){
+      if(t==gameboard.rows[r].cells[c]){
+        if(!flag[r][c]){
+          click(r,c);
+        }
+      }
+    }
+  }
+}
+function handleRightClick(t){
+  console.log('handleRightClick');
+  for(let r=0;r<board.length;++r){
+    for(let c=0;c<board[r].length;++c){
+      if(t==gameboard.rows[r].cells[c]){
+        if(board[r][c]===null){
+          flag[r][c]=!flag[r][c];
+          show();
+        }
+      }
+    }
+  }
+}
+gameboard.onclick=(e)=>{
+  handleLeftClick(e.target);
+}
+gameboard.addEventListener('contextmenu', (e)=>{
+  console.log('contextmenu');
+  e.preventDefault();
+  handleRightClick(e.target);
+  return false;
+}, true);
+
+let timerLongTouch;
+let longTouch = false;
+
+gameboard.addEventListener("touchstart", (event)=>{
+  console.log('touchstart');
+  event.preventDefault();
+  timerLongTouch = setTimeout(function() {
+    console.log('timerLongTouch');
+    longTouch = true;
+  }, 500);
+});
+gameboard.addEventListener("touchmove", (event)=>{
+  console.log('touchmove');
+  event.preventDefault();
+
+});
+gameboard.addEventListener("touchend",(event)=>{
+  console.log('touchend');
+  event.preventDefault();
+  clearTimeout(timerLongTouch);
+  if(longTouch){
+    longTouch = false;
+    handleRightClick(event.target);
+  }else{
+    handleLeftClick(event.target);
+  }
+});
+</script>
